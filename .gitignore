@@ -3,3 +3,10 @@
 ################################################################################
 
 /CommerceBot/bin
+/CommerceBot/obj/Debug
+/.vs
+/CommerceBot.Model/bin/Debug
+/CommerceBot.Model/obj/Debug
+/CommerceBot.Repository/bin/Debug
+/CommerceBot.Repository/obj/Debug
+/packages

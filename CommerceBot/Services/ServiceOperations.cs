@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CommerceBot.Model;
+using CommerceBot.Repository;
+using System.Linq;
 
 namespace CommerceBot.Services
 {
@@ -37,7 +40,15 @@ namespace CommerceBot.Services
 
         public Task<IList<string>> GetExistingReservations(int userId)
         {
-            return Task.FromResult<IList<string>>(new[] { "Hawaii", "Los Angeles" });
+            var locations = new List<string>();
+            using (var dbContext = new  CommerceBotConext())
+            {
+                var query = from st in dbContext.Locations
+                            select st.LocationName;
+                locations = query.ToList();
+            }
+            return Task.FromResult<IList<string>>(locations);
+            // return Task.FromResult<IList<string>>(new[] { "Hawaii", "Los Angeles" });
         }
 
         public async Task<UserProfile> GetUserInformation(string name, string email)

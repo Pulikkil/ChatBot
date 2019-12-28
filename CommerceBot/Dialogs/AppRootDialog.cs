@@ -14,7 +14,7 @@ namespace CommerceBot.Dialogs
     // Subscription Key is one of the two keys from your Cognitive Services App.
     // Find at: https://portal.azure.com in the Resource Group where you've created
     // your Cognitive Services resource on the Keys blade.
-    [LuisModel("af3bb835-a03d-48bc-8170-e9641fba0863", "36099b62640d4cb5bb181e1db353260a")]
+    [LuisModel("dded32d3-794d-4bff-a145-0b2c4a51595c", "05526086dcc9459e9a3b8b75e07cb27f")]
     [Serializable]
     public class AppRootDialog : LuisDialog<object>
     {
