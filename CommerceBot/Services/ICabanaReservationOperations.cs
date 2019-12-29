@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CommerceBot.Model;
+
 
 namespace CommerceBot.Services
 {
@@ -12,6 +14,7 @@ namespace CommerceBot.Services
         Task<UserProfile> GetUserInformation(string name, string email);
         Task<IList<Cabana>> GetCabanaAvailability(string reservationChoice, CabanaQuery searchQuery);
         Task<CabanaReservation> ReserveCabana(int hotelReservationId, int CabanaId, DateTime startDate, int days);
+        Cabana GetCabana(string name);
         // lot more we can do
         // edit, delete, etc.
     }

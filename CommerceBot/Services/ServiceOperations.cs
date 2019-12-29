@@ -9,6 +9,17 @@ namespace CommerceBot.Services
 {
     public class ServiceOperations : ICabanaReservationOperations, IHotelReservationOperations
     {
+        public  Cabana GetCabana(string name)
+        {
+            Cabana cabana = null;
+            using (var dbContext = new CommerceBotConext())
+            {
+                cabana = dbContext.Cabanas
+                    .Where(t => t.CabanaName.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                    .FirstOrDefault();
+            }
+            return cabana;
+        }
 
         public async Task<IList<Cabana>> GetCabanaAvailability(string reservationChoice, CabanaQuery searchQuery)
         {
@@ -16,21 +27,18 @@ namespace CommerceBot.Services
             var cabanas = new List<Cabana>();
             var random = new Random(1);
 
-            // Filling the cabana results manually for demo purposes
-            for (int i = 1; i <= 3; i++)
+            var selectedLocationID = 0;
+            using (var dbContext = new CommerceBotConext())
             {
-                Cabana cabana = new Cabana()
-                {
-                    Id = i,
-                    Name = $"{reservationChoice} Cabana {i}",
-                    Location = reservationChoice,
-                    Rating = random.Next(1, 5),
-                    NumberOfReviews = random.Next(0, 5000),
-                    PriceStarting = random.Next(95, 495),
-                    Image = $"https://placeholdit.imgix.net/~text?txtsize=35&txt=Cabana+{i}&w=500&h=260"
-                };
+                var query = from st in dbContext.Locations
+                            where st.LocationName.Equals(reservationChoice, StringComparison.InvariantCultureIgnoreCase)
+                            select st.LocationID;
+                selectedLocationID = query.FirstOrDefault();
 
-                cabanas.Add(cabana);
+                var queryCabana = dbContext.Cabanas
+                                  .Include("Location")
+                                  .Where(c => c.LocationID == selectedLocationID);
+                cabanas = queryCabana.ToList();
             }
 
             cabanas.Sort((h1, h2) => h1.PriceStarting.CompareTo(h2.PriceStarting));

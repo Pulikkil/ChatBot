@@ -53,9 +53,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommerceBotConext.cs" />
-    <Compile Include="Migrations\201912280758405_CommerceBot.cs" />
-    <Compile Include="Migrations\201912280758405_CommerceBot.designer.cs">
-      <DependentUpon>201912280758405_CommerceBot.cs</DependentUpon>
+    <Compile Include="Migrations\201912281554101_CommerceBot.cs" />
+    <Compile Include="Migrations\201912281554101_CommerceBot.designer.cs">
+      <DependentUpon>201912281554101_CommerceBot.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,8 +71,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201912280758405_CommerceBot.resx">
-      <DependentUpon>201912280758405_CommerceBot.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201912281554101_CommerceBot.resx">
+      <DependentUpon>201912281554101_CommerceBot.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

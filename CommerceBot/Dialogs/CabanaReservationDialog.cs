@@ -1,4 +1,5 @@
-﻿using CommerceBot.Services;
+﻿using CommerceBot.Model;
+using CommerceBot.Services;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Connector;
@@ -67,24 +68,26 @@ namespace CommerceBot.Dialogs
 
         private async Task OnPickCabana(IDialogContext context, IAwaitable<string> result)
         {
-            string optionSelected = await result;
-            string cabanaIdText = optionSelected.Substring(optionSelected.LastIndexOf(' ') + 1);
-            int cabanaId = int.Parse(cabanaIdText);
-
-            await context.PostAsync($"Booking your cabana '{optionSelected}', please wait ...");
-
-            CabanaQuery searchQuery = context.ConversationData.GetValue<CabanaQuery>("CabanaQuery");
-            int reservationId = 1;
-
-            DateTime startDate = searchQuery.Start;
-            int days = searchQuery.Days;
-
-            UserProfile userInfo = context.ConversationData.GetValue<UserProfile>(UserSessionDataKey);
             ICabanaReservationOperations icro = ServiceLocator.GetCabanaReservationOperations();
-            CabanaReservation cres = await icro.ReserveCabana(reservationId, cabanaId, startDate, days);
+            string optionSelected = await result;
+            var cabana = icro.GetCabana(optionSelected);
+            if (cabana != null)
+            {
+                int cabanaId = cabana.CabanaID;
+                await context.PostAsync($"Booking your cabana '{optionSelected}', please wait ...");
 
-            await context.PostAsync($"Cabana booked. Your Cabana Booking Id is {cres.CabanaBookingId}.");
+                CabanaQuery searchQuery = context.ConversationData.GetValue<CabanaQuery>("CabanaQuery");
+                int reservationId = 1;
 
+                DateTime startDate = searchQuery.Start;
+                int days = searchQuery.Days;
+
+                UserProfile userInfo = context.ConversationData.GetValue<UserProfile>(UserSessionDataKey);
+
+                CabanaReservation cres = await icro.ReserveCabana(reservationId, cabanaId, startDate, days);
+
+                await context.PostAsync($"Cabana booked. Your Cabana Booking Id is {cres.CabanaBookingId}.");
+            }
             context.Done<object>(null);
         }
 
@@ -110,10 +113,10 @@ namespace CommerceBot.Dialogs
                 List<string> cabanaChoices = new List<string>();
                 foreach (var cabana in cabanas)
                 {
-                    cabanaChoices.Add(cabana.Name);
+                    cabanaChoices.Add(cabana.CabanaName);
                     HeroCard heroCard = new HeroCard()
                     {
-                        Title = cabana.Name,
+                        Title = cabana.CabanaName,
                         Subtitle = $"{cabana.Rating} stars. {cabana.NumberOfReviews} reviews. From ${cabana.PriceStarting} per day.",
                         Images = new List<CardImage>()
                         {
@@ -125,7 +128,7 @@ namespace CommerceBot.Dialogs
                             {
                                 Title = "More details",
                                 Type = ActionTypes.OpenUrl,
-                                Value = $"https://www.bing.com/search?q=hotels+in+" + HttpUtility.UrlEncode(cabana.Location)
+                                Value = $"https://www.bing.com/search?q=hotels+in+" + HttpUtility.UrlEncode(cabana.Location.LocationName)
                             }
                         }
                     };

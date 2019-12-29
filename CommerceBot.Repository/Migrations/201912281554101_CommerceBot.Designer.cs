@@ -13,7 +13,7 @@ namespace CommerceBot.Repository.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201912280758405_CommerceBot"; }
+            get { return "201912281554101_CommerceBot"; }
         }
         
         string IMigrationMetadata.Source
